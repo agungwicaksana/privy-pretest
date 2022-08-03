@@ -24,7 +24,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf(appName, appVersion)
+	fmt.Printf("%s v%s\n", appName, appVersion)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	cmd.Run()
