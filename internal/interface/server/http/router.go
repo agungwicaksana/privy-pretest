@@ -15,6 +15,7 @@ func SetupRouter(server *echo.Echo, handler *handler) *echo.Echo {
 	cakes.GET("", handler.cakeHandler.Find)
 	cakes.POST("", handler.cakeHandler.Save)
 	cakes.GET("/:id", handler.cakeHandler.FindOne)
+	cakes.PUT("/:id", handler.cakeHandler.Update)
 
 	return server
 }

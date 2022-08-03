@@ -24,7 +24,7 @@ type CakeRepository interface {
 	Find(ctx context.Context, start, limit int, sortBy string) (data []CakeEntity, err error)
 	FindOne(ctx context.Context, id string) (data []CakeEntity, err error)
 	Insert(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error)
-	// Update(ctx context.Context, data CakeEntity) (result sql.Result, err error)
+	Update(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error)
 	// Delete(ctx context.Context, data CakeEntity) (result sql.Result, err error)
 }
 
@@ -71,6 +71,15 @@ func (r *repositoryCake) Insert(ctx context.Context, tx *sql.Tx, data CakeEntity
 			VALUES
 		(?, ?, ?, ?)`,
 		data.Title, &data.Description, &data.Rating, &data.Image,
+	)
+	return
+}
+
+func (r *repositoryCake) Update(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error) {
+	result, err = tx.ExecContext(ctx, `UPDATE cakes SET
+		title = ?, description = ?, rating = ?, image = ?, updated_at = ?
+		WHERE id = ?`,
+		data.Title, &data.Description, &data.Rating, &data.Image, data.UpdatedAt, data.ID,
 	)
 	return
 }

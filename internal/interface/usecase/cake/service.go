@@ -8,6 +8,7 @@ import (
 
 type CakeService interface {
 	Find(ctx context.Context, page, limit int, sortBy []Sort) (resp response.Response)
-	Save(ctx context.Context, req CakeRequest) (resp response.Response)
 	FindOne(ctx context.Context, id string) (resp response.Response)
+	Save(ctx context.Context, req CakeRequest) (resp response.Response)
+	Update(ctx context.Context, id string, req CakeRequest) (resp response.Response)
 }

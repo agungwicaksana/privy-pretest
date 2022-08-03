@@ -132,3 +132,23 @@ func (h *cakeHandler) FindOne(c echo.Context) (err error) {
 	resp := h.cakeService.FindOne(ctx, id)
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *cakeHandler) Update(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+
+	id := c.Param("id")
+
+	_, err = strconv.Atoi(id)
+	if err != nil {
+		c.Set("RC", response.STATUS_REQUEST_VALIDATION_FAILED)
+		return
+	}
+
+	req := cake.CakeRequest{}
+	if err = helpers.Validate(c, &req); err != nil {
+		return
+	}
+
+	resp := h.cakeService.Update(ctx, id, req)
+	return c.JSON(http.StatusOK, resp)
+}

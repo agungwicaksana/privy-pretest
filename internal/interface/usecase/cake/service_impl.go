@@ -3,6 +3,7 @@ package cake
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/agungwicaksana/privy-pretest/internal/domain"
 	"github.com/agungwicaksana/privy-pretest/pkg/response"
@@ -101,5 +102,65 @@ func (s *service) FindOne(ctx context.Context, id string) (resp response.Respons
 	}
 
 	resp = response.CreateResponse(response.STATUS_READ_SUCCESS, response.MESSAGE_SUCCESS, data[0])
+	return
+}
+
+func (s *service) Update(ctx context.Context, id string, req CakeRequest) (resp response.Response) {
+	existing, err := s.cakeRepo.FindOne(ctx, id)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	if len(existing) < 1 {
+		resp = response.CreateErrorResponse(response.STATUS_DATA_NOT_FOUND, "")
+		return
+	}
+
+	trx, err := s.cakeRepo.BeginTrx(ctx)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	data := domain.CakeEntity{
+		ID:          existing[0].ID,
+		Title:       req.Title,
+		Description: req.Description,
+		Rating:      req.Rating,
+		Image:       req.Image,
+		UpdatedAt:   time.Now(),
+	}
+
+	result, err := s.cakeRepo.Update(ctx, trx, data)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+	trx.Commit()
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	if a, err := result.RowsAffected(); a < 1 || err != nil {
+		log.Error("Update error", err)
+		resp = response.CreateErrorResponse(response.STATUS_UPDATE_ERROR, "")
+		return
+	}
+
+	resp = response.CreateResponse(response.STATUS_UPDATE_SUCCESS, response.MESSAGE_SUCCESS, domain.CakeEntity{
+		ID:          existing[0].ID,
+		Title:       data.Title,
+		Description: data.Description,
+		Rating:      data.Rating,
+		Image:       data.Image,
+		CreatedAt:   existing[0].CreatedAt,
+		UpdatedAt:   data.UpdatedAt,
+	})
 	return
 }
