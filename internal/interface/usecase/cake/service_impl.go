@@ -32,7 +32,6 @@ func (s *service) Validate() CakeService {
 
 func (s *service) Find(ctx context.Context, page, limit int, sortBy []Sort) (resp response.Response) {
 	start := limit * (page - 1)
-
 	sortByStr := ""
 	for _, s := range sortBy {
 		sorter := fmt.Sprintf("%s %s,", s.Column, s.Type)
@@ -85,5 +84,22 @@ func (s *service) Save(ctx context.Context, req CakeRequest) (resp response.Resp
 	}
 
 	resp = response.CreateResponse(response.STATUS_CREATE_SUCCESS, response.MESSAGE_SUCCESS, id)
+	return
+}
+
+func (s *service) FindOne(ctx context.Context, id string) (resp response.Response) {
+	data, err := s.cakeRepo.FindOne(ctx, id)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	if len(data) < 1 {
+		resp = response.CreateErrorResponse(response.STATUS_DATA_NOT_FOUND, "")
+		return
+	}
+
+	resp = response.CreateResponse(response.STATUS_READ_SUCCESS, response.MESSAGE_SUCCESS, data[0])
 	return
 }

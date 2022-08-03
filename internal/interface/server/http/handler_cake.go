@@ -117,3 +117,18 @@ func (h *cakeHandler) Save(c echo.Context) (err error) {
 	resp := h.cakeService.Save(ctx, req)
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *cakeHandler) FindOne(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+
+	id := c.Param("id")
+
+	_, err = strconv.Atoi(id)
+	if err != nil {
+		c.Set("RC", response.STATUS_REQUEST_VALIDATION_FAILED)
+		return
+	}
+
+	resp := h.cakeService.FindOne(ctx, id)
+	return c.JSON(http.StatusOK, resp)
+}
