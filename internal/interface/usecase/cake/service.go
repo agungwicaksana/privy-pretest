@@ -11,4 +11,5 @@ type CakeService interface {
 	FindOne(ctx context.Context, id string) (resp response.Response)
 	Save(ctx context.Context, req CakeRequest) (resp response.Response)
 	Update(ctx context.Context, id string, req CakeRequest) (resp response.Response)
+	Delete(ctx context.Context, id string) (resp response.Response)
 }

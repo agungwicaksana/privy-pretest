@@ -140,7 +140,7 @@ func (s *service) Update(ctx context.Context, id string, req CakeRequest) (resp 
 		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
 		return
 	}
-	trx.Commit()
+	err = trx.Commit()
 	if err != nil {
 		log.Error("SQL Error", err)
 		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
@@ -162,5 +162,48 @@ func (s *service) Update(ctx context.Context, id string, req CakeRequest) (resp 
 		CreatedAt:   existing[0].CreatedAt,
 		UpdatedAt:   data.UpdatedAt,
 	})
+	return
+}
+
+func (s *service) Delete(ctx context.Context, id string) (resp response.Response) {
+	existing, err := s.cakeRepo.FindOne(ctx, id)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	if len(existing) < 1 {
+		resp = response.CreateErrorResponse(response.STATUS_DATA_NOT_FOUND, "")
+		return
+	}
+
+	trx, err := s.cakeRepo.BeginTrx(ctx)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	result, err := s.cakeRepo.Delete(ctx, trx, id)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	err = trx.Commit()
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	if a, err := result.RowsAffected(); a < 1 || err != nil {
+		log.Error("Delete error", err)
+		resp = response.CreateErrorResponse(response.STATUS_DELETE_ERROR, "")
+		return
+	}
+	resp = response.CreateResponse(response.STATUS_DELETE_SUCCESS, response.MESSAGE_SUCCESS, nil)
 	return
 }

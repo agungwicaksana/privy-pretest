@@ -152,3 +152,18 @@ func (h *cakeHandler) Update(c echo.Context) (err error) {
 	resp := h.cakeService.Update(ctx, id, req)
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *cakeHandler) Delete(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+
+	id := c.Param("id")
+
+	_, err = strconv.Atoi(id)
+	if err != nil {
+		c.Set("RC", response.STATUS_REQUEST_VALIDATION_FAILED)
+		return
+	}
+
+	resp := h.cakeService.Delete(ctx, id)
+	return c.JSON(http.StatusOK, resp)
+}

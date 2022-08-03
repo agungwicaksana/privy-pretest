@@ -25,7 +25,7 @@ type CakeRepository interface {
 	FindOne(ctx context.Context, id string) (data []CakeEntity, err error)
 	Insert(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error)
 	Update(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error)
-	// Delete(ctx context.Context, data CakeEntity) (result sql.Result, err error)
+	Delete(ctx context.Context, tx *sql.Tx, id string) (result sql.Result, err error)
 }
 
 type repositoryCake struct {
@@ -81,5 +81,10 @@ func (r *repositoryCake) Update(ctx context.Context, tx *sql.Tx, data CakeEntity
 		WHERE id = ?`,
 		data.Title, &data.Description, &data.Rating, &data.Image, data.UpdatedAt, data.ID,
 	)
+	return
+}
+
+func (r *repositoryCake) Delete(ctx context.Context, tx *sql.Tx, id string) (result sql.Result, err error) {
+	result, err = tx.ExecContext(ctx, `DELETE FROM cakes WHERE id = ?`, id)
 	return
 }

@@ -12,7 +12,7 @@ func SetupMiddleware(server *echo.Echo) {
 	// server.Use(middleware.Logger())
 	server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowMethods:     []string{echo.GET, echo.POST, echo.PATCH, echo.DELETE},
 		AllowHeaders:     []string{"Accept", "Content-Length", "Content-Type"},
 		AllowCredentials: true,
 	}))
