@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/agungwicaksana/privy-pretest/pkg/response"
 	"github.com/labstack/echo/v4"
@@ -16,6 +17,26 @@ func SetupMiddleware(server *echo.Echo) {
 		AllowHeaders:     []string{"Accept", "Content-Length", "Content-Type"},
 		AllowCredentials: true,
 	}))
+
+	config := middleware.RateLimiterConfig{
+		Skipper: middleware.DefaultSkipper,
+		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
+			middleware.RateLimiterMemoryStoreConfig{Rate: 10, Burst: 30, ExpiresIn: 3 * time.Minute},
+		),
+		IdentifierExtractor: func(ctx echo.Context) (string, error) {
+			id := ctx.RealIP()
+			return id, nil
+		},
+		ErrorHandler: func(context echo.Context, err error) error {
+			return context.JSON(http.StatusForbidden, nil)
+		},
+		DenyHandler: func(context echo.Context, identifier string, err error) error {
+			return context.JSON(http.StatusTooManyRequests, nil)
+		},
+	}
+
+	server.Use(middleware.RateLimiterWithConfig(config))
+
 	server.HTTPErrorHandler = errorHandler
 }
 
