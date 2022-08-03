@@ -11,8 +11,9 @@ func SetupRouter(server *echo.Echo, handler *handler) *echo.Echo {
 		return c.JSON(http.StatusOK, "Service is healthy")
 	})
 
-	cake := server.Group("/cake")
-	cake.GET("", handler.cakeHandler.Find)
+	cakes := server.Group("/cakes")
+	cakes.GET("", handler.cakeHandler.Find)
+	cakes.POST("", handler.cakeHandler.Save)
 
 	return server
 }

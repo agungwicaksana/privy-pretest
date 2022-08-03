@@ -11,7 +11,7 @@ import (
 
 type CakeEntity struct {
 	ID          uint64    `db:"id" json:"id"`
-	Code        *string   `db:"title" json:"title"`
+	Title       string    `db:"title" json:"title"`
 	Description *string   `db:"description" json:"description"`
 	Rating      *float32  `db:"rating" json:"rating"`
 	Image       *string   `db:"image" json:"image"`
@@ -23,7 +23,7 @@ type CakeRepository interface {
 	BeginTrx(ctx context.Context) (*sql.Tx, error)
 	Find(ctx context.Context, start, limit int, sortBy string) (data []CakeEntity, err error)
 	FindOne(ctx context.Context, id string) (data []CakeEntity, err error)
-	// Insert(ctx context.Context, data CakeEntity) (result sql.Result, err error)
+	Insert(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error)
 	// Update(ctx context.Context, data CakeEntity) (result sql.Result, err error)
 	// Delete(ctx context.Context, data CakeEntity) (result sql.Result, err error)
 }
@@ -62,5 +62,15 @@ func (r *repositoryCake) Find(ctx context.Context, start, limit int, orderBy str
 
 func (r *repositoryCake) FindOne(ctx context.Context, id string) (data []CakeEntity, err error) {
 	err = r.db.SelectContext(ctx, &data, "SELECT * FROM cakes WHERE id = ?", id)
+	return
+}
+
+func (r *repositoryCake) Insert(ctx context.Context, tx *sql.Tx, data CakeEntity) (result sql.Result, err error) {
+	result, err = tx.ExecContext(ctx, `INSERT INTO cakes 
+		(title, description, rating, image) 
+			VALUES
+		(?, ?, ?, ?)`,
+		data.Title, &data.Description, &data.Rating, &data.Image,
+	)
 	return
 }

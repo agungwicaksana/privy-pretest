@@ -48,3 +48,42 @@ func (s *service) Find(ctx context.Context, page, limit int, sortBy []Sort) (res
 	resp = response.CreateResponse(response.STATUS_READ_SUCCESS, response.MESSAGE_SUCCESS, data)
 	return
 }
+
+func (s *service) Save(ctx context.Context, req CakeRequest) (resp response.Response) {
+	trx, err := s.cakeRepo.BeginTrx(ctx)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	data := domain.CakeEntity{
+		Title:       req.Title,
+		Description: req.Description,
+		Rating:      req.Rating,
+		Image:       req.Image,
+	}
+
+	result, err := s.cakeRepo.Insert(ctx, trx, data)
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+	trx.Commit()
+	if err != nil {
+		log.Error("SQL Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_SQL_ERROR, "")
+		return
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		log.Error("Create Error", err)
+		resp = response.CreateErrorResponse(response.STATUS_CREATE_ERROR, "")
+		return
+	}
+
+	resp = response.CreateResponse(response.STATUS_CREATE_SUCCESS, response.MESSAGE_SUCCESS, id)
+	return
+}

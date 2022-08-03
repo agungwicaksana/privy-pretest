@@ -105,3 +105,15 @@ func (h *cakeHandler) Find(c echo.Context) (err error) {
 	resp := h.cakeService.Find(ctx, page, limit, sortBy)
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *cakeHandler) Save(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+
+	req := cake.CakeRequest{}
+	if err = helpers.Validate(c, &req); err != nil {
+		return
+	}
+
+	resp := h.cakeService.Save(ctx, req)
+	return c.JSON(http.StatusOK, resp)
+}
