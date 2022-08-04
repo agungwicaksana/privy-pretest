@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  app:
+    image: agungwicaksana/cakestore:latest
+    build: 
+      context: .
+    pull_policy: never
+    ports:
+      - "8482:8482"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_PORT: "8482"
+      MYSQL_URI: "agung:cakeAgungGstore@tcp(cakesql:3306)/cakestore"
+      MYSQL_TIMEOUT: 15
+      MYSQL_MAX_POOL: 50
+      MYSQL_MIN_POOL: 2
+    networks:
+      - cakestore_network
+  mysql:
+    image: mysql:8
+    container_name: cakesql
+    ports:
+      - "8486:3306"
+    volumes:
+      - mysql_cakestore:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootCakeine"
+      MYSQL_DATABASE: "cakestore"
+      MYSQL_USER: "agung"
+      MYSQL_PASSWORD: "cakeAgungGstore"
+    networks:
+      - cakestore_network
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=rootCakeine --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    restart: always
+volumes:
+  mysql_cakestore:
+    external: false
+networks:
+  cakestore_network:
+    driver: bridge

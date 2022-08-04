@@ -1,6 +1,8 @@
 package http
 
 import (
+	"fmt"
+
 	"github.com/agungwicaksana/privy-pretest/internal/interface/container"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -20,6 +22,6 @@ func StartHttpService(container *container.Container) {
 	SetupMiddleware(echo)
 	handler := SetupHandlers(container).Validate()
 	router := SetupRouter(echo, handler)
-	port := ":3000"
+	port := fmt.Sprintf(":%s", container.AppConfig.AppPort)
 	router.Logger.Fatal(router.Start(port))
 }

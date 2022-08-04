@@ -23,7 +23,6 @@ func Setup() *Container {
 		MySqlTimeout:     config.GetInt("MYSQL_TIMEOUT", env),
 		MySqlMaxPool:     config.GetInt("MYSQL_MAX_POOL", env),
 		MySqlMinPoolSize: config.GetInt("MYSQL_MIN_POOL", env),
-		MySqlDebugMode:   config.GetBool("MYSQL_DEBUG_MODE", env),
 	}
 	config.ValidateEnv(appConfig)
 

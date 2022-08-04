@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cakesql-config
+data:
+  MYSQL_ROOT_PASSWORD: "rootCakeine"
+  MYSQL_DATABASE: "cakestore"
+  MYSQL_USER: "agung"
+  MYSQL_PASSWORD: "cakeAgungGstore"

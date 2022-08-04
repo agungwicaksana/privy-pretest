@@ -6,5 +6,4 @@ type AppConfig struct {
 	MySqlTimeout     int    `validate:"required"`
 	MySqlMaxPool     int    `validate:"required"`
 	MySqlMinPoolSize int    `validate:"required"`
-	MySqlDebugMode   bool   `validate:"required"`
 }
