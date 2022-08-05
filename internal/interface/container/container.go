@@ -29,7 +29,9 @@ func Setup() *Container {
 	db := mysql.NewMySQL(*appConfig)
 	migration.NewMigration(db).RegisterSchemas(
 		migration.CakeSchema,
-	).Migrate()
+	).Migrate().RegisterSeeder(
+		migration.CakeSeeder,
+	).Seed()
 
 	cakeRepo := domain.NewCakeRepo(db)
 	cakeService := cake.NewService().SetCakeRepo(cakeRepo).Validate()

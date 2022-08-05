@@ -4,7 +4,7 @@ metadata:
   name: cakestore-config
 data:
   APP_PORT: "8482"
-  MYSQL_URI: "agung:cakeAgungGstore@tcp(sqlcake-service:3306)/cakestore"
+  MYSQL_URI: "agung:cakeAgungGstore@tcp(sqlcake-service:3306)/cakestore?parseTime=true"
   MYSQL_TIMEOUT: "15"
   MYSQL_MAX_POOL: "50"
   MYSQL_MIN_POOL: "2"

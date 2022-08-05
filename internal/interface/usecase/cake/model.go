@@ -6,8 +6,8 @@ type Sort struct {
 }
 
 type CakeRequest struct {
-	Title       string   `json:"title" validate:"required"`
+	Title       string   `json:"title" validate:"required,max=100"`
 	Description *string  `json:"description" validate:"omitempty"`
-	Rating      *float32 `json:"rating" validate:"omitempty,numeric,gte=0,lte=10"`
-	Image       *string  `json:"image" validate:"omitempty,url"`
+	Rating      *float32 `json:"rating" validate:"omitempty,lte=10,gte=0,numeric"`
+	Image       *string  `json:"image" validate:"omitempty,max=200"`
 }

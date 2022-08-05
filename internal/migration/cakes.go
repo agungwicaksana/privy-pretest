@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS cakes (
 	title varchar(100) NOT NULL,
 	description text NULL,
 	rating FLOAT NULL,
-	image varchar(100) NULL,
+	image varchar(200) NULL,
 	created_at TIMESTAMP DEFAULT NOW() NOT NULL,
 	updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
 	CONSTRAINT cakes_PK PRIMARY KEY (id)

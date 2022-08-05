@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "6474a2cc-54a7-48b0-a2ef-d2bbb2a877b8",
+		"name": "CakeStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11646067"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/cakes?limit=6&page=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cakes"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "rating,-title,description",
+							"description": "Advanced sorting feature. Use \"-\" for descending.",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "6"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/cakes/:id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cakes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Lemon cheesecake\",\n    \"description\": \"A cheesecake made of lemon\",\n    \"rating\": 7,\n    \"image\": \"https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cakes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cakes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Lemon cheesecake2\",\n    \"description\": \"A cheesecake made of lemon\",\n    \"rating\": 7,\n    \"image\": \"https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cakes/:id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cakes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/cakes/:id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cakes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8482",
+			"type": "string"
+		}
+	]
+}
