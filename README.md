@@ -2,7 +2,9 @@
 #### v.1.0.0
 
 Developmed by 
+
 :sunglasses: Agung Wicaksana
+
 :mailbox_with_mail: agung.wicaksaana@gmail.com
 
 CakeStore App provides CRUD for cake data.
