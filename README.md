@@ -80,6 +80,7 @@ Fill the env variables based on your needs
 Download packages needed by the app
 ````
 go mod download
+go mod tidy
 ````
 
 
